@@ -1,102 +1,127 @@
-# Trench Logistics - Analytics Dashboard
-
-## Introducción
-Este proyecto simula los retos de una empresa ficticia de logística, **Trench Logistics**, que busca mejorar la eficiencia de sus entregas y reducir penalidades.  
-
-El objetivo fue realizar un análisis **end-to-end**:
-1. Generación y limpieza de datos en **MySQL**.  
-2. Modelado y visualización en **Power BI**.  
-3. Obtención de **insights accionables** y recomendaciones de negocio.  
+# Caso de Estudio – Trench Logistics  
+**Análisis de desempeño logístico con SQL y Power BI**  
 
 ---
 
-## 🗂️ Datos
-Se diseñaron tres datasets ficticios para el análisis:  
+## 1. Contexto del Negocio  
+**Trench Logistics** es una empresa dedicada a la distribución de útiles escolares en Lima y principales ciudades.  
+Las tarifas actuales se calculan por **peso (kg)**, con ligeras variaciones por distancia.  
 
-- **Clientes.csv** → Información de clientes, centro de distribución, tipo y descuentos.  
-- **Ordenes.csv** → Pedidos con fechas de solicitud/entrega, peso, volumen.  
-- **Tarifas.csv** → Costos por distrito y kg.  
+La política de entregas es clara:  
+- **≤ 48 horas** → Cumplimiento estándar.  
+- **3 días** → Penalidad del **5%**.  
+- **> 3 días** → Penalidad del **10%**.  
 
-Los datos fueron cargados en **MySQL**, donde se realizó limpieza, validación de consistencia y creación de campos derivados (ej. días de entrega, status final, penalidades).
+Los ejecutivos identificaron un aumento de penalidades y un margen operativo más bajo de lo esperado.  
+Se planteó la necesidad de analizar:  
+
+1. ¿Qué factores generan más penalidades?  
+2. ¿Se debe actualizar la estructura tarifaria?  
+3. ¿Dónde están los principales puntos críticos de la operación?  
 
 ---
 
-## Preparación de datos (SQL)
-Ejemplo de consulta en MySQL para calcular métricas clave:  
+## 2. Metodología de análisis (inspirada en Google Analytics Framework)
+
+### 🔎 a) Definir objetivos  
+- Reducir penalidades.  
+- Evaluar si las tarifas actuales reflejan los costos reales.  
+- Detectar focos críticos en entregas y rentabilidad.  
+
+### 📊 b) Recolectar datos  
+Se generaron datasets ficticios para simular un escenario realista:  
+- **Clientes** → tipo de cliente, centro de distribución, descuentos.  
+- **Órdenes** → fecha de solicitud, fecha de entrega, peso, volumen.  
+- **Tarifas** → costo por distrito y por kg.  
+
+Los datos fueron cargados en **MySQL** para limpieza y cálculos iniciales.  
+
+### 🧹 c) Procesar y transformar  
+Ejemplo de consulta SQL utilizada para calcular días de entrega y clasificar pedidos:  
 
 ```sql
-SELECT
-o.id_pedido AS 'ID Pedido',
-o.fecha_solicitud AS 'Fecha Solicitud',
-c.nombre_cliente AS 'Nombre Cliente',
-t.distrito AS 'Distrito',
-o.peso AS 'Peso (kg)',
-o.volumen AS 'Volumen (m3)',
-o.fecha_entrega AS 'Fecha de entrega',
-DATEDIFF(fecha_entrega, fecha_solicitud) AS 'Días de entrega',
-CASE
-WHEN DATEDIFF(fecha_entrega, fecha_solicitud) = 0 THEN 'Entregado express'
-WHEN DATEDIFF(fecha_entrega, fecha_solicitud) BETWEEN 1 AND 2 THEN 'Entregado a tiempo'
-ELSE 'Demorado'
-END AS 'Status final'
+SELECT 
+    o.id_pedido,
+    o.fecha_solicitud,
+    c.nombre_cliente,
+    t.distrito,
+    o.peso,
+    o.volumen,
+    o.fecha_entrega,
+    DATEDIFF(fecha_entrega, fecha_solicitud) AS dias_entrega,
+    CASE
+        WHEN DATEDIFF(fecha_entrega, fecha_solicitud) = 0 THEN 'Express'
+        WHEN DATEDIFF(fecha_entrega, fecha_solicitud) BETWEEN 1 AND 2 THEN 'A tiempo'
+        ELSE 'Demorado'
+    END AS status_final,
+    CASE
+        WHEN DATEDIFF(fecha_entrega, fecha_solicitud) = 3 THEN 0.95
+        WHEN DATEDIFF(fecha_entrega, fecha_solicitud) > 3 THEN 0.90
+        ELSE 1
+    END AS factor_penalidad
 FROM ordenes AS o
 LEFT JOIN clientes AS c ON o.id_cliente = c.id_cliente
-LEFT JOIN tarifas AS t ON c.id_distrito = t.id_distrito
-ORDER BY fecha_solicitud;
-
+LEFT JOIN tarifas AS t ON c.id_distrito = t.id_distrito;
 ```
 
+Este paso permitió construir una tabla lista para análisis en Power BI.
 
-📂 Ver el archivo completo de SQL en [`/sql/data_preparation.sql`](./sql/data_preparation.sql)  
+📈 d) Analizar
 
----
+Con Power BI se desarrollaron visualizaciones clave:
 
-## Análisis en Power BI
-Se construyó un dashboard interactivo con las siguientes secciones:  
+KPIs: % OTIF, días promedio de entrega, penalidades totales.
 
-### KPIs principales
-- **OTIF % (On Time In Full)**  
-- **Días promedio de entrega**  
-- **Costo promedio por pedido**  
-- **% de entregas express**  
-- **Penalidades totales**
+Tendencia mensual de entregas (Express / A tiempo / Demorado).
 
-### Visualizaciones destacadas
-- **Barras apiladas** → Pedidos entregados express, a tiempo y demorados por mes.  
-- **Línea de tendencia** → % OTIF en el tiempo.  
-- **Mapa** → Costo total por distrito.  
-- **Dispersión** → Peso vs. Volumen, identificando clusters de pedidos.  
-- **Burbujas** → Margen vs. Peso con tamaño por costo operativo (eficiencia de pedidos).  
-- **Tabla dinámica** → Ranking de clientes clave.  
+Mapa de costos por distrito.
 
-Ejemplo de medida en **DAX** usada en Power BI:  
+Dispersión peso vs volumen → para detectar pedidos voluminosos con bajo margen.
 
-```
-OTIF % =
+Ranking de clientes → rentabilidad y cumplimiento.
+
+Ejemplo de medida en DAX:
+
+```sql
+OTIF % = 
 DIVIDE(
-COUNTROWS(FILTER(Ordenes, Ordenes[Status final] IN {"Entregado a tiempo", "Entregado express"})),
-COUNTROWS(Ordenes),
-0
+    COUNTROWS(FILTER(Ordenes, Ordenes[status_final] IN {"A tiempo", "Express"})),
+    COUNTROWS(Ordenes),
+    0
 )
+
 ```
+📝 e) Conclusiones y recomendaciones
+1. Carga voluminosa con baja rentabilidad
 
---
+Se identificó un aumento en pedidos de gran volumen (m³) que requieren más transporte sin generar ingresos proporcionales.
+💡 Recomendación: Implementar una tarifa diferenciada para carga voluminosa, alineada al costo real.
 
-## 📌 Insights clave
-1. **60% de las penalidades** corresponden al **20% de órdenes más demoradas**.  
-2. Se identifican **dos clusters** de pedidos por peso/volumen → recomendar tarifas diferenciadas.  
-3. Distritos como **Arequipa y Chiclayo** presentan **bajo cumplimiento de entregas**.  
-4. Pedidos pequeños (<5 kg) generan **bajo margen** pero consumen gran capacidad operativa.  
+2. Penalidades concentradas en focos críticos
 
----
+Centros de distribución de Arequipa y Chiclayo no alcanzan el objetivo de 90% OTIF.
 
-## 🔗 Demo interactivo  
+El 60% de clientes más rentables presenta retrasos.
 
-[![Ver Dashboard](./images/dashboard_preview.png)](https://app.powerbi.com/view?r=eyJrIjoiMGQ5YTlhZWEtMDYwMy00NTI4LTgzM2QtNTYwMDY0MDA5M2EzIiwidCI6ImM1YjVkZjc0LWI1NWMtNDE4NS05MjQ5LWFhMjU0YzFlNjBkOCIsImMiOjR9&pageName=3f2e19b32d58d65655ff)
+El 80% de los distritos clave también incumple tiempos.
+💡 Recomendación: Revisar rutas, procesos operativos y evaluar capacitación adicional en estos puntos estratégicos.
 
-## Autor
-**Oscar Granada Navarro**  
-Industrial Engineer | Data Analyst | SQL & Power BI  
+3. Impacto esperado
 
-🔗 [LinkedIn](https://www.linkedin.com/in/oscargranada/)  
-📧 [Email](mailto:ing.oscar,granada@gmail.com)  
+Con estas medidas se busca:
+
+Reducir penalidades recurrentes.
+
+Mejorar márgenes en pedidos voluminosos.
+
+Fortalecer la satisfacción de clientes de alto valor.
+
+4. Demo del Dashboard
+
+🔗 Ver Dashboard en Power BI
+
+5. Autor
+
+Oscar Granada Navarro
+Ingeniero Industrial | Analista de Datos | SQL & Power BI
+
