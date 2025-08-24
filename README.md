@@ -90,10 +90,9 @@ COUNTROWS(Ordenes),
 
 ---
 
-## 🔗 Demo interactivo
-[Ver Dashboard en Power BI](TU_LINK_PUBLICO_AQUI)  
+## 🔗 Demo interactivo  
 
----
+[![Ver Dashboard](./images/dashboard_preview.png)](https://app.powerbi.com/view?r=eyJrIjoiMGQ5YTlhZWEtMDYwMy00NTI4LTgzM2QtNTYwMDY0MDA5M2EzIiwidCI6ImM1YjVkZjc0LWI1NWMtNDE4NS05MjQ5LWFhMjU0YzFlNjBkOCIsImMiOjR9&pageName=3f2e19b32d58d65655ff)
 
 ## Autor
 **Oscar Granada Navarro**  
