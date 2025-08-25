@@ -145,12 +145,22 @@ SET NAMES utf8mb4;
 - La lógica de penalidad está alineada con políticas de entrega: penalización del 5% si se entrega en 3 días, y del 10% si se excede.
 - La clasificación de tamaño de pedido permite segmentar la logística por peso: Pedidos pequeños si pesan menos a 5kg, pedidos medianos si pesan de 5 a 20 kg, y pedidos grandes los mayores a 20 kg.
 
+Finalmente, ejecutamos la consulta, revisamos los resultados y exportamos el resultado en el archivo `Trench_Logistics_data_consolidada.csv`.
+
+### 5. Realización del dashboard en Power BI
+
+Exportamos el archivo 📄[Trench_Logistics_data_consolidada.cs](Trench_Logistics_data_consolidada.cs) a Power BI, y procedemos con la revisión de la data en Power Query, asegurando que todas las columnas tenga la información completa, sin errores y con el formato correcto.
 
 
 
-📈 d) Analizar
+
+### 6. Análisis
+
+A continuación se realiza la importación de la d
 
 Con Power BI se desarrollaron visualizaciones clave:
+
+
 
 KPIs: % OTIF, días promedio de entrega, penalidades totales.
 
