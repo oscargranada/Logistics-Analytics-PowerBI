@@ -149,7 +149,7 @@ Finalmente, ejecutamos la consulta, revisamos los resultados y exportamos el res
 
 ### 5. Realización del dashboard en Power BI
 
-Exportamos el archivo 📄[Trench_Logistics_data_consolidada.cs](Trench_Logistics_data_consolidada.cs) a Power BI, y procedemos con la revisión de la data en Power Query, asegurando que todas las columnas tenga la información completa, sin errores y con el formato correcto.
+Exportamos el archivo 📄[Trench_Logistics_data_consolidada.csv](Trench_Logistics_data_consolidada.csv) a Power BI, y procedemos con la revisión de la data en Power Query, asegurando que todas las columnas tenga la información completa, sin errores y con el formato correcto.
 
 
 
