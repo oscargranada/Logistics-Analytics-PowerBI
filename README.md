@@ -128,7 +128,7 @@ LEFT JOIN tarifas AS t
 ```
 
 
-## Cálculo del Beneficio Neto
+### Cálculo del Beneficio Neto
 Una vez generada la tabla `pedidos` con los campos transformados, se calcula el beneficio neto.
 
 ```sql
@@ -138,14 +138,14 @@ FROM pedidos
 ORDER BY `Fecha Solicitud`;
 SET NAMES utf8mb4;
 ```
-## Observaciones
+### Observaciones
 - Se utilizó ROUND() para mantener consistencia en los valores monetarios.
 - La lógica de penalidad está alineada con políticas de entrega: penalización del 5% si se entrega en 3 días, y del 10% si se excede.
 - La clasificación de tamaño de pedido permite segmentar la logística por peso: Pedidos pequeños si pesan menos a 5kg, pedidos medianos si pesan de 5 a 20 kg, y pedidos grandes los mayores a 20 kg.
 
 Finalmente, ejecutamos la consulta, revisamos los resultados y exportamos el resultado en el archivo `Trench_Logistics_data_consolidada.csv`.
 
-### 5. Preparación y modelado de datos en Power BI
+## 5. Preparación y modelado de datos en Power BI
 
 Se importó el archivo 📄[Trench_Logistics_data_consolidada.csv](Trench_Logistics_data_consolidada.csv) a Power BI, iniciando el proceso de limpieza y validación en Power Query. Se verificó que todas las columnas contuvieran información completa, sin errores de tipo ni valores nulos, y se aplicaron los formatos adecuados. Esta consulta se denominó `Data pedidos consolidada`
 
@@ -161,7 +161,7 @@ Este archivo fue importado a Power BI como la consulta `Coordenadas`, y se reali
 
 A continuación, se definieron indicadores clave (KPI) y medidas DAX para facilitar el análisis visual y extraer insights relevantes. A continuación, se detallan las principales transformaciones:
 
-#### a) Columnas:
+### a) Columnas:
 
 - **Calculo de entrega en 48 horas**
   
@@ -179,7 +179,7 @@ GrupoDensidad =
 IF('Data pedidos consolidada'[Peso/volumen]<115,"Voluminosa", "Densa")
 ```
 
-#### b) Medidas DAX
+### b) Medidas DAX
 
 - **Cálculo Peso vs volumen**
   
@@ -223,11 +223,11 @@ DIVIDE(
     SUM('Data pedidos consolidada'[Facturación])
 )
 ```
-### 6. Elaboración y Análisis de gráficos e insights operativos
+## 6. Elaboración y Análisis de gráficos e insights operativos
 
 Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar el desempeño logístico y financiero de Trench Logistics entre 2023 y 2025. A continuación, se detallan los principales hallazgos:
 
-#### a) Cumplimiento de entregas y penalidades
+### a) Cumplimiento de entregas y penalidades
 
 - La evolución mensual muestra una caída progresiva en el cumplimiento, pasando de 95% a 85% en algunos trimestres.
 - Se identifican picos de penalidades en marzo y julio, lo que sugiere posibles cuellos de botella operativos o estacionalidad.
@@ -243,7 +243,7 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
 
 **Insight:** Se recomienda revisar rutas y procesos en zonas críticas, especialmente en distritos como Chorrillos, Comas y Pimentel, donde se concentran penalidades elevadas.
 
-#### b) Rentabilidad por tipo de carga
+### b) Rentabilidad por tipo de carga
 
 - Los pedidos de carga voluminosa presentan menor rentabilidad operativa, a pesar de requerir más unidades de transporte.
 - Actualmente, las tarifas se aplican en función del peso, lo que genera una brecha entre costo logístico y facturación en pedidos de gran volumen.
@@ -254,7 +254,7 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
 **Insight:** Evaluar una estructura tarifaria diferenciada para carga voluminosa, alineada al costo real de operación.
 
 
-#### c) Beneficio por zona y cliente
+### c) Beneficio por zona y cliente
 
 - El 60% de los clientes más rentables presentan incumplimientos en entregas.
 - Distritos como Chorrillos, Alto Selva Alegre y Barranco concentran altos beneficios, pero también penalidades frecuentes.
@@ -264,7 +264,7 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
   
 **Insight:** Priorizar mejoras operativas en zonas y clientes estratégicos para proteger la rentabilidad y fidelidad de los segmentos más valiosos.
 
-#### d) Penalidades por tipo de pedido y cliente
+### d) Penalidades por tipo de pedido y cliente
 
 - El 91.5% de las penalidades se concentran en pedidos medianos, y el 89.7% provienen de clientes mayoristas.
 - Se detecta una contradicción operativa: distritos con penalidad promedio alta también tienen alto volumen de pedidos afectados.
@@ -273,28 +273,35 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
   
 **Insight:** Corregir desvíos operativos en zonas con alta congestión o fallas de coordinación. Posible necesidad de capacitación adicional o revisión de SLA.
 
-### 7. Conclusiones y recomendaciones finales
+## 7. Conclusiones y recomendaciones finales
 
 El análisis realizado sobre la operación logística de Trench Logistics entre 2023 y 2025 permitió identificar patrones críticos que afectan la rentabilidad, el cumplimiento de entregas y la eficiencia operativa. A través de la integración de datos geográficos, segmentación por tipo de carga y evaluación de penalidades, se extrajeron insights clave que pueden guiar decisiones estratégicas.
 
-#### Conclusiones:
+### Conclusiones:
 - Zonas críticas de penalidad: Distritos como Comas, Chorrillos y Pimentel concentran penalidades elevadas, lo que sugiere fallas en rutas, tiempos de entrega o coordinación operativa.
 - Carga voluminosa con baja rentabilidad: El modelo tarifario actual no refleja el costo real de transportar pedidos de baja densidad, afectando el margen operativo.
 - Clientes estratégicos con bajo cumplimiento: Algunos de los clientes más rentables presentan altos niveles de incumplimiento, lo que pone en riesgo la fidelidad y la facturación futura.
 - Desbalance entre tipo de pedido y penalidad: Los pedidos medianos y mayoristas concentran la mayoría de penalidades, lo que indica una posible saturación operativa en ese segmento.
   
-#### Recomendaciones:
+### Recomendaciones:
 - Optimizar rutas en zonas de alta penalidad, priorizando distritos con alto volumen y bajo cumplimiento.
 - Revisar el modelo tarifario, incorporando un esquema diferenciado para carga voluminosa que refleje el costo logístico real.
 - Fortalecer la coordinación con clientes mayoristas, ajustando los SLA y reforzando la planificación en temporadas críticas.
 - Implementar alertas operativas en Power BI, que permitan detectar desviaciones en tiempo real y anticipar penalidades.
 
-4. Demo del Dashboard
+## 8. Cierre del proyecto
 
-🔗 Ver Dashboard en Power BI
+Este proyecto representa una síntesis entre análisis financiero, optimización logística y visualización estratégica. A través del uso de Power BI, SQL y modelado de datos, se logró transformar información operativa en decisiones accionables. La documentación busca no solo mostrar resultados, sino también el proceso detrás de cada insight.
+Gracias por revisar este trabajo. Si tienes comentarios, sugerencias, estaré encantado de conectar.
 
-5. Autor
 
-Oscar Granada Navarro
-Ingeniero Industrial | Analista de Datos | SQL & Power BI
+##
+
+**Autor:** Oscar Granada Navarro
+
+*Ingeniero Industrial | Analista de Datos | SQL & Power BI*
+
+**Linkedin:** [linkedin.com/in/oscargranada/](https://www.linkedin.com/in/oscargranada/)
+
+**Repositorio:** [github.com/oscargranada/Logistics-Analytics-PowerBI.git](https://github.com/oscargranada/Logistics-Analytics-PowerBI.git)
 
