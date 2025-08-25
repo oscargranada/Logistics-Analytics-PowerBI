@@ -5,6 +5,12 @@
 
 Se realizó este proyecto de análisis de eficiencia operativa con data de una empresa ficticia llamada **Trench Logistics**. A continuación veremos el proceso end-to-end desde que se tiene una problemática, hasta que se obtienen los insight clave para llegar a conclusiones acertadas.
 
+## 📊 Dashboard interactivo
+
+Este proyecto incluye un análisis logístico y financiero de penalidades, rentabilidad por cliente y eficiencia operativa.
+
+🔗 [Haz clic aquí para ver el dashboard en Power BI](https://app.powerbi.com/view?r=eyJrIjoiMGQ5YTlhZWEtMDYwMy00NTI4LTgzM2QtNTYwMDY0MDA5M2EzIiwidCI6ImM1YjVkZjc0LWI1NWMtNDE4NS05MjQ5LWFhMjU0YzFlNjBkOCIsImMiOjR9&pageName=3f2e19b32d58d65655ff)
+
 ## 1. Contexto del Negocio  
 **Trench Logistics** es una empresa dedicada a la distribución de útiles escolares en Lima, Arequipa y Chiclayo.  
 Las tarifas actuales se calculan por **peso (kg)**, con ligeras variaciones por distancia.  
@@ -222,58 +228,66 @@ DIVIDE(
 Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar el desempeño logístico y financiero de Trench Logistics entre 2023 y 2025. A continuación, se detallan los principales hallazgos:
 
 #### a) Cumplimiento de entregas y penalidades
-![Imagen](/Screenshots_dashboard/Slide_Cumplimiento_de_entrega.png)
+
 - La evolución mensual muestra una caída progresiva en el cumplimiento, pasando de 95% a 85% en algunos trimestres.
 - Se identifican picos de penalidades en marzo y julio, lo que sugiere posibles cuellos de botella operativos o estacionalidad.
-- Los centros de distribución en Arequipa y Chiclayo no alcanzan el objetivo del 90% de entregas a tiempo, afectando la fidelidad de clientes clave
+
+  
+  ![Imagen](/Screenshots_dashboard/Slide_Cumplimiento_de_entrega.png)
 
 
+- Los centros de distribución en Arequipa y Chiclayo no alcanzan el objetivo del 90% de entregas a tiempo, afectando la fidelidad de clientes clave.
 
-KPIs: % OTIF, días promedio de entrega, penalidades totales.
+  
+  ![Imagen](/Screenshots_dashboard/Slide_Cumplimiento_de_entrega_2.png)
 
-Tendencia mensual de entregas (Express / A tiempo / Demorado).
+**Insight:** Se recomienda revisar rutas y procesos en zonas críticas, especialmente en distritos como Chorrillos, Comas y Pimentel, donde se concentran penalidades elevadas.
 
-Mapa de costos por distrito.
+#### b) Rentabilidad por tipo de carga
 
-Dispersión peso vs volumen → para detectar pedidos voluminosos con bajo margen.
+- Los pedidos de carga voluminosa presentan menor rentabilidad operativa, a pesar de requerir más unidades de transporte.
+- Actualmente, las tarifas se aplican en función del peso, lo que genera una brecha entre costo logístico y facturación en pedidos de gran volumen.
+  
 
-Ranking de clientes → rentabilidad y cumplimiento.
+  ![Imagen](/Screenshots_dashboard/Slide_Analisis_costo.png)
+  
+**Insight:** Evaluar una estructura tarifaria diferenciada para carga voluminosa, alineada al costo real de operación.
 
-Ejemplo de medida en DAX:
 
-```sql
-OTIF % = 
-DIVIDE(
-    COUNTROWS(FILTER(Ordenes, Ordenes[status_final] IN {"A tiempo", "Express"})),
-    COUNTROWS(Ordenes),
-    0
-)
+#### c) Beneficio por zona y cliente
 
-```
-📝 e) Conclusiones y recomendaciones
-1. Carga voluminosa con baja rentabilidad
+- El 60% de los clientes más rentables presentan incumplimientos en entregas.
+- Distritos como Chorrillos, Alto Selva Alegre y Barranco concentran altos beneficios, pero también penalidades frecuentes.
 
-Se identificó un aumento en pedidos de gran volumen (m³) que requieren más transporte sin generar ingresos proporcionales.
-💡 Recomendación: Implementar una tarifa diferenciada para carga voluminosa, alineada al costo real.
+  
+  ![Imagen](/Screenshots_dashboard/Slide_Clientes_clave.png)
+  
+**Insight:** Priorizar mejoras operativas en zonas y clientes estratégicos para proteger la rentabilidad y fidelidad de los segmentos más valiosos.
 
-2. Penalidades concentradas en focos críticos
+#### d) Penalidades por tipo de pedido y cliente
 
-Centros de distribución de Arequipa y Chiclayo no alcanzan el objetivo de 90% OTIF.
+- El 91.5% de las penalidades se concentran en pedidos medianos, y el 89.7% provienen de clientes mayoristas.
+- Se detecta una contradicción operativa: distritos con penalidad promedio alta también tienen alto volumen de pedidos afectados.
 
-El 60% de clientes más rentables presenta retrasos.
+  ![Imagen](/Screenshots_dashboard/Slide_Analisis_penalidades.png)
+  
+**Insight:** Corregir desvíos operativos en zonas con alta congestión o fallas de coordinación. Posible necesidad de capacitación adicional o revisión de SLA.
 
-El 80% de los distritos clave también incumple tiempos.
-💡 Recomendación: Revisar rutas, procesos operativos y evaluar capacitación adicional en estos puntos estratégicos.
+### 7. Conclusiones y recomendaciones finales
 
-3. Impacto esperado
+El análisis realizado sobre la operación logística de Trench Logistics entre 2023 y 2025 permitió identificar patrones críticos que afectan la rentabilidad, el cumplimiento de entregas y la eficiencia operativa. A través de la integración de datos geográficos, segmentación por tipo de carga y evaluación de penalidades, se extrajeron insights clave que pueden guiar decisiones estratégicas.
 
-Con estas medidas se busca:
-
-Reducir penalidades recurrentes.
-
-Mejorar márgenes en pedidos voluminosos.
-
-Fortalecer la satisfacción de clientes de alto valor.
+#### Conclusiones:
+- Zonas críticas de penalidad: Distritos como Comas, Chorrillos y Pimentel concentran penalidades elevadas, lo que sugiere fallas en rutas, tiempos de entrega o coordinación operativa.
+- Carga voluminosa con baja rentabilidad: El modelo tarifario actual no refleja el costo real de transportar pedidos de baja densidad, afectando el margen operativo.
+- Clientes estratégicos con bajo cumplimiento: Algunos de los clientes más rentables presentan altos niveles de incumplimiento, lo que pone en riesgo la fidelidad y la facturación futura.
+- Desbalance entre tipo de pedido y penalidad: Los pedidos medianos y mayoristas concentran la mayoría de penalidades, lo que indica una posible saturación operativa en ese segmento.
+  
+#### Recomendaciones:
+- Optimizar rutas en zonas de alta penalidad, priorizando distritos con alto volumen y bajo cumplimiento.
+- Revisar el modelo tarifario, incorporando un esquema diferenciado para carga voluminosa que refleje el costo logístico real.
+- Fortalecer la coordinación con clientes mayoristas, ajustando los SLA y reforzando la planificación en temporadas críticas.
+- Implementar alertas operativas en Power BI, que permitan detectar desviaciones en tiempo real y anticipar penalidades.
 
 4. Demo del Dashboard
 
