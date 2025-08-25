@@ -35,9 +35,9 @@ En base a la problemática expuesta por los ejecutivos, se plantearon los siguie
 ### b) Recolectar datos  
 Se descargó la siguiente información desde el WMS (Warehouse Management System):
 
-- 📄 [clientes.csv](Logistics-Analytics-PowerBI/clientes.csv) → Tipo de cliente, centro de distribución, descuentos. 
-- 📄 [ordenes.csv](sql/ordenes.csv) → Fecha de solicitud, fecha de entrega, peso, volumen. 
-- 📄 [tarifas.csv](sql/tarifas.csv) → Costo por distrito y por kg.
+- 📄 [clientes.csv](clientes.csv) → Tipo de cliente, centro de distribución, descuentos. 
+- 📄 [ordenes.csv](ordenes.csv) → Fecha de solicitud, fecha de entrega, peso, volumen. 
+- 📄 [tarifas.csv](tarifas.csv) → Costo por distrito y por kg.
 
 Los datos fueron cargados en **MySQL** para limpieza y cálculos iniciales.  
 
