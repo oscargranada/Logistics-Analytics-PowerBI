@@ -80,56 +80,48 @@ SELECT
     -- Información del cliente
     c.nombre_cliente        AS `Nombre Cliente`,
     c.centro_distribucion   AS `Centro de Distribución`,
-	t.id_distrito			AS `ID Distrito`,
+    t.id_distrito           AS `ID Distrito`,
     t.distrito              AS `Distrito`,
     c.tipo_cliente          AS `Tipo Cliente`,
     
-
     -- Datos del pedido
-    t.tarifa_kg              AS `Tarifa por kg`,
+    t.tarifa_kg             AS `Tarifa por kg`,
     o.peso                  AS `Peso (kg)`,
-    ROUND(t.tarifa_kg  * o.peso ,2)	AS `Facturación`,
+    ROUND(t.tarifa_kg * o.peso, 2) AS `Facturación`,
     o.volumen               AS `Volumen (m3)`,
     o.fecha_entrega         AS `Fecha de Entrega`,
     
-
     -- Métricas calculadas
     DATEDIFF(o.fecha_entrega, o.fecha_solicitud) AS `Días de Entrega`,
 
     -- Clasificación del estado final del pedido
     CASE
-        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud) <=2 
-             THEN 'Entrega a tiempo'
-        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud)= 3
-             THEN 'Penalidad 5%'
+        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud) <= 2 THEN 'Entrega a tiempo'
+        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud) = 3 THEN 'Penalidad 5%'
         ELSE 'Penalidad 10%'
     END AS `Status Orden`,
     
     CASE
-        WHEN o.peso >=20
-             THEN 'Grande'
-        WHEN o.peso >=5
-             THEN 'Mediano'
+        WHEN o.peso >= 20 THEN 'Grande'
+        WHEN o.peso >= 5 THEN 'Mediano'
         ELSE 'Pequeño'
     END AS `Tipo de pedido`,
     
     CASE
-        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud) <=2 
-             THEN 0
-        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud)= 3
-             THEN ROUND (t.tarifa_kg  * o.peso *0.05,2)
-        ELSE ROUND(t.tarifa_kg  * o.peso *0.1,2)
-    END AS `Penalidad` 
+        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud) <= 2 THEN 0
+        WHEN DATEDIFF(o.fecha_entrega, o.fecha_solicitud) = 3 THEN ROUND(t.tarifa_kg * o.peso * 0.05, 2)
+        ELSE ROUND(t.tarifa_kg * o.peso * 0.1, 2)
+    END AS `Penalidad`
  
 FROM ordenes AS o
 LEFT JOIN clientes AS c
        ON o.id_cliente = c.id_cliente
 LEFT JOIN tarifas AS t
        ON c.id_distrito = t.id_distrito
-
-
 )
 ```
+
+
 ## Cálculo del Beneficio Neto
 Una vez generada la tabla `pedidos` con los campos transformados, se calcula el beneficio neto.
 
@@ -147,18 +139,93 @@ SET NAMES utf8mb4;
 
 Finalmente, ejecutamos la consulta, revisamos los resultados y exportamos el resultado en el archivo `Trench_Logistics_data_consolidada.csv`.
 
-### 5. Realización del dashboard en Power BI
+### 5. Preparación y modelado de datos en Power BI
 
-Exportamos el archivo 📄[Trench_Logistics_data_consolidada.csv](Trench_Logistics_data_consolidada.csv) a Power BI, y procedemos con la revisión de la data en Power Query, asegurando que todas las columnas tenga la información completa, sin errores y con el formato correcto.
+Se importó el archivo 📄[Trench_Logistics_data_consolidada.csv](Trench_Logistics_data_consolidada.csv) a Power BI, iniciando el proceso de limpieza y validación en Power Query. Se verificó que todas las columnas contuvieran información completa, sin errores de tipo ni valores nulos, y se aplicaron los formatos adecuados. Esta consulta se denominó `Data pedidos consolidada`
 
+![Imagen](/Screenshots_dashboard/Revision_power_query.png)
 
+Durante la revisión, se identificó que la base incluía información de zonas y distritos por pedido, pero no contaba con coordenadas geográficas (latitud y longitud), necesarias para la visualización en mapas dinámicos. Para resolverlo, se extrajeron las coordenadas oficiales de los distritos desde el portal del INEI y se consolidaron en un archivo auxiliar:
 
+- 📋 [coordenadas.xlsx](coordenadas.xlsx)
 
-### 6. Análisis
+Este archivo fue importado a Power BI como la consulta `Coordenadas`, y se realizó una combinación con `Data pedidos consolidada` para incorporar las columnas de `latitud` y `longitud` en la consulta principal.
 
-A continuación se realiza la importación de la d
+![Imagen](/Screenshots_dashboard/JOIN_power_query.png)
 
-Con Power BI se desarrollaron visualizaciones clave:
+A continuación, se definieron indicadores clave (KPI) y medidas DAX para facilitar el análisis visual y extraer insights relevantes. A continuación, se detallan las principales transformaciones:
+
+#### a) Columnas:
+
+- **Calculo de entrega en 48 horas**
+  
+  Clasifica los pedidos según si fueron entregados dentro del plazo establecido
+```sql
+¿Entrega en 48h? = 
+IF('Data pedidos consolidada'[Status Orden] = "Entrega a tiempo", "Sí", "No")
+```
+- **Agrupación por densidad**
+
+  Segmenta los pedidos en función de su densidad. Se considera "Voluminosa" si el ratio peso/volumen es menor a 115 kg/m³, y "Densa" si es igual o superior.
+
+```sql
+GrupoDensidad = 
+IF('Data pedidos consolidada'[Peso/volumen]<115,"Voluminosa", "Densa")
+```
+
+#### b) Medidas DAX
+
+- **Cálculo Peso vs volumen**
+  
+  Calcula la densidad de cada pedido.
+  
+```sql
+Peso/volumen =
+'Data pedidos consolidada'[Peso (kg)]/'Data pedidos consolidada'[Volumen (m3)]
+```
+
+- **Penalidad promedio por pedido**
+
+  Promedio de penalidades aplicadas a pedidos con penalización.
+```sql
+PenalidadPromedioPorPedido = 
+DIVIDE(
+    SUMX(
+        FILTER('Data pedidos consolidada','Data pedidos consolidada'[Penalidad] > 0),
+        'Data pedidos consolidada'[Penalidad]
+    ),
+    COUNTROWS(
+        FILTER('Data pedidos consolidada','Data pedidos consolidada'[Penalidad] > 0)
+    )
+)
+```
+- **Ratio Beneficio vs Facturación**
+
+  Ratio de beneficio neto sobre la facturación total.
+```sql
+%Beneficio/Facturacion =
+
+sum('Data pedidos consolidada'[Beneficio Neto])/sum('Data pedidos consolidada'[Facturación])
+```
+- **Ratio Penalidad vs Facturación**
+
+  Proporción de penalidades respecto a la facturación.
+```sql
+%Penalidad/Facturacion = 
+DIVIDE(
+    SUM('Data pedidos consolidada'[Penalidad]),
+    SUM('Data pedidos consolidada'[Facturación])
+)
+```
+### 6. Elaboración y Análisis de gráficos e insights operativos
+
+Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar el desempeño logístico y financiero de Trench Logistics entre 2023 y 2025. A continuación, se detallan los principales hallazgos:
+
+#### a) Cumplimiento de entregas y penalidades
+![Imagen](/Screenshots_dashboard/Slide_Cumplimiento_de_entrega.png)
+- La evolución mensual muestra una caída progresiva en el cumplimiento, pasando de 95% a 85% en algunos trimestres.
+- Se identifican picos de penalidades en marzo y julio, lo que sugiere posibles cuellos de botella operativos o estacionalidad.
+- Los centros de distribución en Arequipa y Chiclayo no alcanzan el objetivo del 90% de entregas a tiempo, afectando la fidelidad de clientes clave
 
 
 
