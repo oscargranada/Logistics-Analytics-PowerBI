@@ -31,7 +31,7 @@ Se planteó la necesidad de analizar:
 2. ¿Dónde están los principales puntos críticos de la operación?  
 3. ¿Qué factores generan más penalidades?
 
-## 2. Metodología de análisis (basado en Google Analytics Framework)
+## 2. Diagnóstico inicial y preparación analítica
 
 ### a) Definir objetivos
 En base a la problemática expuesta por los ejecutivos, se plantearon los siguientes objetivos que se deben alcanzar.
@@ -67,8 +67,9 @@ Los datos fueron cargados en **MySQL** para limpieza y cálculos iniciales.
 │
 ├── 📁 sql
 │   ├── Consolidare_Data_ForPowerBI.sql
-│   ├── Trench_Logistics_data_consolidada.csv
-└── README.es.md ← archivo principal del proyecto
+│   └── Trench_Logistics_data_consolidada.csv
+│
+└── TrenchLogistics_ES.md ← archivo principal del proyecto
 
 ```
 
