@@ -13,12 +13,16 @@ Este proyecto incluye un análisis logístico y financiero de penalidades, renta
 
 ## 1. Contexto del Negocio  
 **Trench Logistics** es una empresa dedicada a la distribución de útiles escolares en Lima, Arequipa y Chiclayo.  
-Las tarifas actuales se calculan por **peso (kg)**, con ligeras variaciones por distancia.  
+Las tarifas actuales se calculan por **peso (kg)**, con ligeras variaciones por distancia.
 
-La política de entregas es clara:  
-- **≤ 48 horas**    :    Cumplimiento estándar.  
-- **3 días**        :    Reembolso del **5%** de la facturación en compensación por la demora.  
-- **> 3 días**      :    Reembolso del **10%** de la facturación en compensación por la demora.  
+Los principales indicadores clave de desempeño (KPI) definidos por la compañía son:
+- **% de entregas dentro de 48 horas:** 90%
+- **% de beneficio sobre facturación:** 99.5%
+  
+La política de entregas está estructurada de forma transparente:
+- Entregas en ≤ 48 horas: se consideran dentro del estándar operativo.
+- Entregas en 3 días: aplican un reembolso del 5% sobre el monto facturado como compensación.
+- Entregas en más de 3 días: generan un reembolso del 10% sobre la facturación total.
 
 Los ejecutivos identificaron un aumento de penalidades y un margen operativo más bajo de lo esperado.  
 Se planteó la necesidad de analizar:
@@ -26,8 +30,6 @@ Se planteó la necesidad de analizar:
 1. ¿Se debe actualizar la estructura tarifaria?  
 2. ¿Dónde están los principales puntos críticos de la operación?  
 3. ¿Qué factores generan más penalidades?
-
----
 
 ## 2. Metodología de análisis (basado en Google Analytics Framework)
 
@@ -53,6 +55,7 @@ Los datos fueron cargados en **MySQL** para limpieza y cálculos iniciales.
 📂 Trench-Logistics-Analytics
 ├── 📁 data
 │   ├── clientes.csv
+│   ├── coordenadas.csv
 │   ├── ordenes.csv
 │   └── tarifas.csv
 │
