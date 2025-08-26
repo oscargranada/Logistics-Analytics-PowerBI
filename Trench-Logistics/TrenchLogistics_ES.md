@@ -151,7 +151,7 @@ Finalmente, ejecutamos la consulta, revisamos los resultados y exportamos el res
 
 ## 5. Preparación y modelado de datos en Power BI
 
-Se importó el archivo 📄[Trench_Logistics_data_consolidada.csv](Trench_Logistics_data_consolidada.csv) a Power BI, iniciando el proceso de limpieza y validación en Power Query. Se verificó que todas las columnas contuvieran información completa, sin errores de tipo ni valores nulos, y se aplicaron los formatos adecuados. Esta consulta se denominó `Data pedidos consolidada`
+Se importó el archivo 📄[Trench_Logistics_data_consolidada.csv](/Trench-Logistics/sql/Trench_Logistics_data_consolidada.csv) a Power BI, iniciando el proceso de limpieza y validación en Power Query. Se verificó que todas las columnas contuvieran información completa, sin errores de tipo ni valores nulos, y se aplicaron los formatos adecuados. Esta consulta se denominó `Data pedidos consolidada`
 
 ![Imagen](/Screenshots_dashboard/Revision_power_query.png)
 
