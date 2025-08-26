@@ -13,8 +13,8 @@ Bienvenido a mi portafolio personal, donde presento proyectos de analítica end-
 - Lógica avanzada con DAX y Power Query (M).
 - Visualización clara y orientada a toma de decisiones.
 
-🔗 [Versión en español](OscarGranada-Analytics/Trench-Logistics/README.md) ← estás aquí  
-🔗 [English version](OscarGranada-Analytics/Trench-Logistics/README.en.md) ← próximamente
+🔗 [Versión en español](/Trench-Logistics/README.md) ← estás aquí  
+🔗 [English version](/Trench-Logistics/README.en.md) ← próximamente
 
 ---
 
