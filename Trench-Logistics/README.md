@@ -275,19 +275,42 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
 
 ## 7. Conclusiones y recomendaciones finales
 
-El análisis realizado sobre la operación logística de Trench Logistics entre 2023 y 2025 permitió identificar patrones críticos que afectan la rentabilidad, el cumplimiento de entregas y la eficiencia operativa. A través de la integración de datos geográficos, segmentación por tipo de carga y evaluación de penalidades, se extrajeron insights clave que pueden guiar decisiones estratégicas.
+El análisis de la operación logística de Trench Logistics entre 2023 y 2025 revela patrones críticos que afectan la rentabilidad, el cumplimiento de entregas y la eficiencia operativa. A través de la segmentación por tipo de carga, evaluación de penalidades y análisis geográfico, se identificaron oportunidades claras de mejora.
 
 ### Conclusiones:
-- Zonas críticas de penalidad: Distritos como Comas, Chorrillos y Pimentel concentran penalidades elevadas, lo que sugiere fallas en rutas, tiempos de entrega o coordinación operativa.
-- Carga voluminosa con baja rentabilidad: El modelo tarifario actual no refleja el costo real de transportar pedidos de baja densidad, afectando el margen operativo.
-- Clientes estratégicos con bajo cumplimiento: Algunos de los clientes más rentables presentan altos niveles de incumplimiento, lo que pone en riesgo la fidelidad y la facturación futura.
-- Desbalance entre tipo de pedido y penalidad: Los pedidos medianos y mayoristas concentran la mayoría de penalidades, lo que indica una posible saturación operativa en ese segmento.
+
+- **Carga voluminosa con baja rentabilidad operativa**
+  
+    Los envíos de baja densidad presentan un desbalance entre volumen y peso, lo que genera márgenes negativos bajo el esquema tarifario actual. Además, estos pedidos concentran penalidades más altas y valores promedio por pedido más bajos, lo que compromete la eficiencia operativa.
+- **Brechas de cumplimiento en zonas clave**
+  
+    Regiones como Arequipa y Chiclayo muestran tasas elevadas de entregas tardías y penalidades del 5%, en contraste con Lima, que alcanza un cumplimiento del 97%. Esto sugiere fallas en planificación, rutas o capacidad instalada en zonas específicas.
+- **Clientes estratégicos con bajo cumplimiento**
+  
+    Algunos clientes de alto valor presentan niveles de incumplimiento que podrían afectar la fidelización y la facturación futura, especialmente en zonas con alta penalidad.
+- **Desbalance entre tipo de carga y penalidad**
+  
+    La carga voluminosa no solo es menos rentable, sino que también está asociada a mayores penalidades, lo que indica una necesidad urgente de revisar procesos operativos y criterios de asignación.
+
   
 ### Recomendaciones:
-- Optimizar rutas en zonas de alta penalidad, priorizando distritos con alto volumen y bajo cumplimiento.
-- Revisar el modelo tarifario, incorporando un esquema diferenciado para carga voluminosa que refleje el costo logístico real.
-- Fortalecer la coordinación con clientes mayoristas, ajustando los SLA y reforzando la planificación en temporadas críticas.
-- Implementar alertas operativas en Power BI, que permitan detectar desviaciones en tiempo real y anticipar penalidades.
+
+- **Revisar el modelo tarifario**
+
+  Incorporar un esquema que considere el volumen como variable clave, especialmente para pedidos de baja densidad, asegurando que el precio refleje el costo logístico real.
+
+- **Priorizar mejoras en zonas críticas**
+
+  Focalizar esfuerzos en Arequipa y Chiclayo, ajustando rutas, tiempos de corte y coordinación operativa para reducir penalidades.
+
+- **Optimizar la gestión de clientes estratégicos**
+
+  Reforzar la planificación con clientes mayoristas, ajustando SLA y anticipando picos de demanda en temporadas críticas.
+
+- **Implementar alertas operativas en Power BI**
+
+  Desarrollar indicadores que detecten desviaciones en tiempo real, permitiendo acciones preventivas ante posibles penalidades.
+
 
 ## 8. Cierre del proyecto
 
