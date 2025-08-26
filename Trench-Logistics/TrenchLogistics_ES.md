@@ -52,24 +52,24 @@ Los datos fueron cargados en **MySQL** para limpieza y cálculos iniciales.
 ## 3. Estructura del proyecto
 
 ```plaintext
-📂 Trench-Logistics-Analytics
+📂 Trench-Logistics
 ├── 📁 data
 │   ├── clientes.csv
-│   ├── coordenadas.csv
+│   ├── coordenadas.xlsx
 │   ├── ordenes.csv
 │   └── tarifas.csv
 │
-├── 📁 sql
-│   └── penalidades.sql
+├── 📁 docs
+│   └── Trench Logistics_Dashboard.pdf
 │
 ├── 📁 powerbi
-│   └── dashboard_preview.png
+│   └── [Imágenes varias]  # contiene capturas de los dashboards
 │
-├── 📁 docs
-│   ├── Trench_Logistics.pdf
-│   └── README.es.md
-│
-└── README.md   ← archivo principal del proyecto
+├── 📁 sql
+│   ├── Consolidare_Data_ForPowerBI.sql
+│   ├── Trench_Logistics_data_consolidada.csv
+└── README.es.md ← archivo principal del proyecto
+
 ```
 
 ## 4. Transformación de Datos en MySQL para Power BI
