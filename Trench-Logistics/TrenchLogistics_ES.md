@@ -43,9 +43,9 @@ En base a la problemática expuesta por los ejecutivos, se plantearon los siguie
 ### b) Recolectar datos  
 Se descargó la siguiente información desde el WMS (Warehouse Management System):
 
-- 📄 [clientes.csv](clientes.csv) → Tipo de cliente, centro de distribución, descuentos. 
-- 📄 [ordenes.csv](ordenes.csv) → Fecha de solicitud, fecha de entrega, peso, volumen. 
-- 📄 [tarifas.csv](tarifas.csv) → Costo por distrito y por kg.
+- 📄 [clientes.csv](/Trench-Logistics/data/clientes.csv) → Tipo de cliente, centro de distribución, descuentos. 
+- 📄 [ordenes.csv](/Trench-Logistics/data/ordenes.csv) → Fecha de solicitud, fecha de entrega, peso, volumen. 
+- 📄 [tarifas.csv](/Trench-Logistics/data/tarifas.csv) → Costo por distrito y por kg.
 
 Los datos fueron cargados en **MySQL** para limpieza y cálculos iniciales.  
 
@@ -153,15 +153,15 @@ Finalmente, ejecutamos la consulta, revisamos los resultados y exportamos el res
 
 Se importó el archivo 📄[Trench_Logistics_data_consolidada.csv](/Trench-Logistics/sql/Trench_Logistics_data_consolidada.csv) a Power BI, iniciando el proceso de limpieza y validación en Power Query. Se verificó que todas las columnas contuvieran información completa, sin errores de tipo ni valores nulos, y se aplicaron los formatos adecuados. Esta consulta se denominó `Data pedidos consolidada`
 
-![Imagen](/Screenshots_dashboard/Revision_power_query.png)
+![Imagen](/Trench-Logistics/powerbi/Revision_power_query.png)
 
 Durante la revisión, se identificó que la base incluía información de zonas y distritos por pedido, pero no contaba con coordenadas geográficas (latitud y longitud), necesarias para la visualización en mapas dinámicos. Para resolverlo, se extrajeron las coordenadas oficiales de los distritos desde el portal del INEI y se consolidaron en un archivo auxiliar:
 
-- 📋 [coordenadas.xlsx](coordenadas.xlsx)
+- 📋 [coordenadas.xlsx](/Trench-Logistics/data/coordenadas.xlsx)
 
 Este archivo fue importado a Power BI como la consulta `Coordenadas`, y se realizó una combinación con `Data pedidos consolidada` para incorporar las columnas de `latitud` y `longitud` en la consulta principal.
 
-![Imagen](/Screenshots_dashboard/JOIN_power_query.png)
+![Imagen](/Trench-Logistics/powerbi/JOIN_power_query.png)
 
 A continuación, se definieron indicadores clave (KPI) y medidas DAX para facilitar el análisis visual y extraer insights relevantes. A continuación, se detallan las principales transformaciones:
 
@@ -237,13 +237,13 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
 - Se identifican picos de penalidades en marzo y julio, lo que sugiere posibles cuellos de botella operativos o estacionalidad.
 
   
-  ![Imagen](/Screenshots_dashboard/Slide_Cumplimiento_de_entrega.png)
+  ![Imagen](/Trench-Logistics/powerbi/Slide_Cumplimiento_de_entrega.png)
 
 
 - Los centros de distribución en Arequipa y Chiclayo no alcanzan el objetivo del 90% de entregas a tiempo, afectando la fidelidad de clientes clave.
 
   
-  ![Imagen](/Screenshots_dashboard/Slide_Cumplimiento_de_entrega_2.png)
+  ![Imagen](/Trench-Logistics/powerbi/Slide_Cumplimiento_Arequipa_Chiclayo.png)
 
 **Insight:** Se recomienda revisar rutas y procesos en zonas críticas, especialmente en distritos como Chorrillos, Comas y Pimentel, donde se concentran penalidades elevadas.
 
@@ -253,7 +253,7 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
 - Actualmente, las tarifas se aplican en función del peso, lo que genera una brecha entre costo logístico y facturación en pedidos de gran volumen.
   
 
-  ![Imagen](/Screenshots_dashboard/Slide_Analisis_costo.png)
+  ![Imagen](/Trench-Logistics/powerbi/Slide_Analisis_costo.png)
   
 **Insight:** Evaluar una estructura tarifaria diferenciada para carga voluminosa, alineada al costo real de operación.
 
@@ -264,17 +264,28 @@ Una vez modelados los datos, se desarrollaron visualizaciones clave para evaluar
 - Distritos como Chorrillos, Alto Selva Alegre y Barranco concentran altos beneficios, pero también penalidades frecuentes.
 
   
-  ![Imagen](/Screenshots_dashboard/Slide_Clientes_clave.png)
+  ![Imagen](/Trench-Logistics/powerbi/Slide_Clientes_clave.png)
   
 **Insight:** Priorizar mejoras operativas en zonas y clientes estratégicos para proteger la rentabilidad y fidelidad de los segmentos más valiosos.
 
 ### d) Penalidades por tipo de pedido y cliente
 
 - El 91.5% de las penalidades se concentran en pedidos medianos, y el 89.7% provienen de clientes mayoristas.
-- Se detecta una contradicción operativa: distritos con penalidad promedio alta también tienen alto volumen de pedidos afectados.
 
-  ![Imagen](/Screenshots_dashboard/Slide_Analisis_penalidades.png)
+
+  ![Imagen](/Trench-Logistics/powerbi/Slide_Analisis_penalidades.png)
   
+- Se identifica una contradicción operativa relevante: algunos distritos presentan una penalidad promedio significativamente alta, a pesar de tener un volumen reducido de pedidos afectados.
+    
+  Distritos críticos: Chorrillos, Pimentel, Miraflores y Comas concentran penalidades total de S/. 733 con apenas 21 pedidos. Esta relación sugiere ineficiencias graves que deben ser revisadas con urgencia.    
+    ![Imagen](/Trench-Logistics/powerbi/Gráfico_distritos_criticos.png)
+  
+  Distritos menores: En contraste, el resto de distritos acumulan penalidades más bajas, incluso con un volumen significativamente mayor de pedidos afectados. Esto indica una gestión más eficiente o una menor severidad en las penalizaciones.
+    ![Imagen](/Trench-Logistics/powerbi/Grafico_distritos_menores.png)
+
+  
+Esta disparidad sugiere una anomalía crítica en la gestión de entregas en dichos distritos, que requiere revisión urgente para evitar impactos desproporcionados en la rentabilidad y el servicio.
+
 **Insight:** Corregir desvíos operativos en zonas con alta congestión o fallas de coordinación. Posible necesidad de capacitación adicional o revisión de SLA.
 
 ## 7. Conclusiones y recomendaciones finales
